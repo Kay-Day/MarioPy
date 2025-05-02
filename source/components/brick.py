@@ -65,11 +65,11 @@ class Brick(stuff.Stuff):
     def update(self):
         if self.state == c.BUMPED:
             self.bumped()
-    
+
     def bumped(self):
         self.rect.y += self.y_vel
         self.y_vel += self.gravity
-        
+
         if self.rect.y >= self.rest_height:
             self.rect.y = self.rest_height
             if self.type == c.TYPE_COIN:
@@ -77,9 +77,7 @@ class Brick(stuff.Stuff):
                     self.state = c.RESTING
                 else:
                     self.state = c.OPENED
-            elif self.type == c.TYPE_STAR:
-                self.state = c.OPENED
-                self.group.add(powerup.Star(self.rect.centerx, self.rest_height))
+            # Loại bỏ phần xử lý TYPE_STAR
             elif self.type == c.TYPE_FIREFLOWER:
                 self.state = c.OPENED
                 self.group.add(powerup.FireFlower(self.rect.centerx, self.rest_height))
@@ -88,10 +86,11 @@ class Brick(stuff.Stuff):
                 self.group.add(powerup.LifeMushroom(self.rect.centerx, self.rest_height))
             else:
                 self.state = c.RESTING
-        
+                self.state = c.RESTING
+
     def start_bump(self, score_group):
         self.y_vel -= 7
-        
+
         if self.type == c.TYPE_COIN:
             if self.coin_num > 0:
                 self.group.add(coin.Coin(self.rect.centerx, self.rect.y, score_group))
@@ -99,12 +98,12 @@ class Brick(stuff.Stuff):
                 if self.coin_num == 0:
                     self.frame_index = 1
                     self.image = self.frames[self.frame_index]
-        elif (self.type == c.TYPE_STAR or 
-            self.type == c.TYPE_FIREFLOWER or 
-            self.type == c.TYPE_LIFEMUSHROOM):
+        # Loại bỏ phần xử lý TYPE_STAR
+        elif (self.type == c.TYPE_FIREFLOWER or
+              self.type == c.TYPE_LIFEMUSHROOM):
             self.frame_index = 1
             self.image = self.frames[self.frame_index]
-        
+
         self.state = c.BUMPED
     
     def change_to_piece(self, group):
